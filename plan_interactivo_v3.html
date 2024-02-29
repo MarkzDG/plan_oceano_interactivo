@@ -1,0 +1,129 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "black"}, "group": "A", "id": "cbc", "label": "CBC", "level": 0, "shape": "hexagon", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "C", "id": "m3", "label": "Matem\u00e1tica\nIII", "level": 2, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "C", "id": "calculo", "label": "C\u00e1lculo\nNum\u00e9rico", "level": 2, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "B", "id": "f1", "label": "F\u00edsica I", "level": 1, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "D", "id": "f2", "label": "F\u00edsica II\n(Electro)", "level": 3, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "D", "id": "fm", "label": "F\u00edsica III\n(Oceanograf\u00eda)", "level": 3, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "B", "id": "labo1", "label": "Laboratorio\nI", "level": 1, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "B", "id": "m1", "label": "Matem\u00e1tica\nI", "level": 1, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "B", "id": "m2", "label": "Matem\u00e1tica\nII", "level": 1, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "D", "id": "m4", "label": "Matem\u00e1tica\nIV", "level": 3, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "B", "id": "general", "label": "Oceanograf\u00eda\nGeneral", "level": 1, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "C", "id": "proba", "label": "Probabilidades\ny\nEstad\u00edstica", "level": 2, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "B", "id": "ino", "label": "Qu\u00edmica\nGeneral\nInorg\u00e1nica\npara\nOcean\u00f3grafos", "level": 1, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "G", "id": "circulacion", "label": "Circulaci\u00f3n\nGeneral", "level": 6, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "F", "id": "instru", "label": "Instrumentos y\nM\u00e9todos de\nObservaci\u00f3n\nOceanogr\u00e1ficos", "level": 5, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "F", "id": "dinamica", "label": "Din\u00e1mica del\nOc\u00e9ano", "level": 5, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "F", "id": "meca", "label": "Mec\u00e1nica de\nlos Fluidos", "level": 5, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "E", "id": "teorica", "label": "Meteorolog\u00eda y\nOceanograf\u00eda\nTe\u00f3rica", "level": 4, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "cambio", "label": "Cambio\nClim\u00e1tico", "level": 9, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "clima", "label": "Climatolog\u00eda", "level": 8, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "clima_d", "label": "Climatolog\u00eda\nDin\u00e1mica", "level": 11, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "conta", "label": "Contaminaci\u00f3n\ndel Oc\u00e9ano y \nsus Costas", "level": 7, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "geologia", "label": "Geolog\u00eda Marina\ny\nLitoral", "level": 7, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "inge", "label": "Introducci\u00f3n a la\nIngenier\u00eda de Costas", "level": 9, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "labo2", "label": "Laboratorio\nII", "level": 7, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "labo_info", "label": "Laboratorio de\nProcesamiento de\nInformaci\u00f3n\nOceanogr\u00e1fica", "level": 8, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "mareas", "label": "Mareas", "level": 10, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "metodo", "label": "M\u00e9todos\nEstad\u00edsticos", "level": 10, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "metodos_num", "label": "M\u00e9todos\nNum\u00e9ricos", "level": 10, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "modelos", "label": "Modelos\nNum\u00e9ricos", "level": 11, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "aplicada", "label": "Oceanograf\u00eda\nAplicada", "level": 9, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "satelital", "label": "Oceanograf\u00eda\nSatelital", "level": 8, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "olas", "label": "Olas", "level": 8, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "olas_nl", "label": "Olas\nNo Lineales", "level": 11, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "sonido", "label": "Propagaci\u00f3n del\nSonido en el Mar", "level": 9, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "quimica_mar", "label": "Qu\u00edmica del Agua\nde Mar", "level": 7, "shape": "box", "title": "cuatrimestral"}, {"font": {"color": "black"}, "group": "optativa", "id": "recursos", "label": "Recursos H\u00eddricos\ny Clima", "level": 10, "shape": "box", "title": "cuatrimestral"}]);
+                  edges = new vis.DataSet([{"color": "#00CED1", "from": "cbc", "title": "TP", "to": "general", "width": 1}, {"color": "#FF0000", "from": "m1", "title": "TP", "to": "calculo", "width": 1}, {"color": "#FF0000", "from": "m2", "title": "TP", "to": "calculo", "width": 1}, {"color": "#00CED1", "from": "cbc", "title": "TP", "to": "f1", "width": 1}, {"color": "#FF0000", "from": "f1", "title": "TP", "to": "f2", "width": 1}, {"color": "#DECA57", "from": "m3", "title": "TP", "to": "f2", "width": 1}, {"color": "#FF0000", "from": "f1", "title": "TP", "to": "fm", "width": 1}, {"color": "#DECA57", "from": "m3", "title": "TP", "to": "fm", "width": 1}, {"color": "#00CED1", "from": "cbc", "title": "TP", "to": "labo1", "width": 1}, {"color": "#00CED1", "from": "cbc", "title": "TP", "to": "m1", "width": 1}, {"color": "#00CED1", "from": "cbc", "title": "TP", "to": "m2", "width": 1}, {"color": "#FF0000", "from": "m1", "title": "TP", "to": "m3", "width": 1}, {"color": "#DECA57", "from": "m3", "title": "TP", "to": "m4", "width": 1}, {"color": "#FF0000", "from": "m1", "title": "TP", "to": "proba", "width": 1}, {"color": "#FF0000", "from": "general", "title": "TP", "to": "proba", "width": 1}, {"color": "#00CED1", "from": "cbc", "title": "TP", "to": "ino", "width": 1}, {"color": "#FF1493", "from": "dinamica", "title": "TP", "to": "circulacion", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "dinamica", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "instru", "width": 1}, {"color": "#DECA57", "from": "proba", "title": "TP", "to": "instru", "width": 1}, {"color": "#008000", "from": "m4", "title": "TP", "to": "meca", "width": 1}, {"color": "#DECA57", "from": "proba", "title": "TP", "to": "meca", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "meca", "width": 1}, {"color": "#FF0000", "from": "general", "title": "TP", "to": "teorica", "width": 1}, {"color": "#DECA57", "from": "m3", "title": "TP", "to": "teorica", "width": 1}, {"color": "#008000", "from": "fm", "title": "TP", "to": "teorica", "width": 1}, {"color": "#8A2BE2", "from": "clima", "title": "TP", "to": "cambio", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "clima", "width": 1}, {"color": "#DECA57", "from": "proba", "title": "TP", "to": "clima", "width": 1}, {"color": "#8A2BE2", "from": "clima", "title": "TP", "to": "clima_d", "width": 1}, {"color": "#FF1493", "from": "circulacion", "title": "TP", "to": "clima_d", "width": 1}, {"color": "#FF0000", "from": "ino", "title": "TP", "to": "conta", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "geologia", "width": 1}, {"color": "#8A2BE2", "from": "olas", "title": "TP", "to": "inge", "width": 1}, {"color": "#FF0000", "from": "labo1", "title": "TP", "to": "labo2", "width": 1}, {"color": "#DECA57", "from": "f2", "title": "TP", "to": "labo2", "width": 1}, {"color": "#DECA57", "from": "proba", "title": "TP", "to": "labo_info", "width": 1}, {"color": "#FF0000", "from": "general", "title": "TP", "to": "labo_info", "width": 1}, {"color": "#FF0000", "from": "m1", "title": "TP", "to": "labo_info", "width": 1}, {"color": "#008000", "from": "m4", "title": "TP", "to": "mareas", "width": 1}, {"color": "#FF1493", "from": "dinamica", "title": "TP", "to": "mareas", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "metodo", "width": 1}, {"color": "#DECA57", "from": "proba", "title": "TP", "to": "metodo", "width": 1}, {"color": "#008000", "from": "m4", "title": "TP", "to": "metodo", "width": 1}, {"color": "#008000", "from": "m4", "title": "TP", "to": "metodos_num", "width": 1}, {"color": "#DECA57", "from": "calculo", "title": "TP", "to": "metodos_num", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "metodos_num", "width": 1}, {"color": "#8A2BE2", "from": "metodos_num", "title": "TP", "to": "modelos", "width": 1}, {"color": "#FF1493", "from": "dinamica", "title": "TP", "to": "modelos", "width": 1}, {"color": "#8A2BE2", "from": "olas", "title": "TP", "to": "aplicada", "width": 1}, {"color": "#FFA500", "from": "teorica", "title": "TP", "to": "satelital", "width": 1}, {"color": "#FF1493", "from": "dinamica", "title": "TP", "to": "olas", "width": 1}, {"color": "#8A2BE2", "from": "olas", "title": "TP", "to": "olas_nl", "width": 1}, {"color": "#FF1493", "from": "dinamica", "title": "TP", "to": "sonido", "width": 1}, {"color": "#FF0000", "from": "ino", "title": "TP", "to": "quimica_mar", "width": 1}, {"color": "#FF0000", "from": "general", "title": "TP", "to": "quimica_mar", "width": 1}, {"color": "#8A2BE2", "from": "clima", "title": "TP", "to": "recursos", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"nodes": {"shape": "box"}, "interaction": {"hover": true}, "physics": {"enabled": false, "hierarchicalRepulsion": {"nodeDistance": 90}, "stabilization": {"iterations": 30, "fit": true}}, "layout": {"hierarchical": {"enabled": true, "parentCentralization": false, "blockShifting": false, "edgeMinimization": false, "direction": "LR"}}, "edges": {"hoverWidth": 0, "arrowStrikethrough": false, "arrows": {"to": {"enabled": true, "scaleFactor": 0.6}}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+                    network.on("click", neighbourhoodHighlight);
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
